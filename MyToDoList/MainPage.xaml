@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyToDoList.MainPage"
+             xmlns:y="clr-namespace:MyToDoList"
+            x:DataType="y:MyToDoListModelView">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid ColumnDefinitions="9*, 1*" RowDefinitions="50, *">
+                <Entry Grid.Column="0" Grid.Row="0" x:Name="TaskExp" Text ="{Binding EntryText}"></Entry>
+                <Button Grid.Column="1" Grid.Row="0" Text="Добавить" Command="{Binding Add}" CommandParameter="{Binding Source={x:Reference TaskExp}, Path=Text}"></Button>
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <CollectionView Grid.Column="0" ItemsSource="{Binding ToDoItemList}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="y:ToDoItem">
+                                <Grid ColumnDefinitions="1*, 8*, 1*">
+                                    <CheckBox x:Name="ItemCheckbox" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0" IsChecked="{Binding IsDone}"></CheckBox>
+                                    <Label x:Name="ItemLabel" VerticalOptions="Center" Grid.Column="1" Text="{Binding Name}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Source = {x:Reference ItemCheckbox}, Path = IsChecked}" Value="true">
+                                                <Setter Property="TextDecorations" Value="Strikethrough"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Source = {x:Reference ItemCheckbox}, Path = IsChecked}" Value="false">
+                                                <Setter Property="TextDecorations" Value="None"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Button Grid.Column="2" Text="Удалить" Command="{Binding Source= {RelativeSource AncestorType = {x:Type y:MyToDoListModelView}}, Path=Delete}" CommandParameter="{Binding }"></Button>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
